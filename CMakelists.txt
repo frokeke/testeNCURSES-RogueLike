@@ -1,0 +1,25 @@
+cmake_minimum_required(VERSION 3.10)
+project(tiporogue C)
+
+set(CURSES_NEED_NCURSES TRUE)
+
+find_package(Curses REQUIRED)
+
+if(NOT CURSES_FOUND)
+	find_library(CURSES_LIBRARY NAMES ncurses curses)
+	find_path(CURSES_INCLUDE_DIR NAMES curses.h ncurses/ncurses.h)
+	
+	if(CURSES_LIBRARY AND CURSES_INCLUDE_DIR)
+		set(CURSES_FOUND TRUE)
+		set(CURSES_LIBRARY ${CURSES_LIBRARY})
+		set(CURSES_INCLUDE_DIRS ${CURSES_INCLUDE_DIR})
+	else()
+		message(FATAL_ERROR "Biblioteca nao encontrada")
+	endif()
+endif()
+
+add_executable(tiporogue main.c)
+
+target_include_directories(tiporogue PRIVATE ${CURSES_INCLUDE_DIRS})
+
+target_link_libraries(tiporogue PRIVATE ${CURSES_INCLUDE_LIBRARIES})
